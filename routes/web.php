@@ -3,7 +3,8 @@
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TaskController;
+use App\Models\Task;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,13 +39,24 @@ Route::post('/login', [AuthController::class, 'login'])->name('do.login');
 Route::middleware(['auth'])->group(function () {
 
     // Landing page (after login/register)
-    Route::get('/home', function () {
-        return view('dashboard.home');
-    })->name('home');
+    Route::middleware('auth')->group(function () {
+        Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+        Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+
+        Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+        Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+        Route::post('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
+        Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+    });
 
     // Logout route (POST request)
     Route::post('/logout', function () {
         Auth::logout();
         return redirect('/')->with('status', 'Logged out!');
     })->name('logout');
+
+  
+
+
 });

@@ -45,6 +45,6 @@ class AuthController extends BaseController
 
         auth()->login($user);
 
-        return redirect('/home')->with('success', 'Login successful!');
+        return redirect('/tasks')->with('success', 'Login successful!');
     }
 }
