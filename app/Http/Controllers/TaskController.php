@@ -17,17 +17,21 @@ class TaskController extends Controller
     }
 
     // Store a new task
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
+    public function create()
+{
+    return view('tasks.create');
+}
 
-        Task::create([
-            'user_id' => Auth::id(),
-            'title' => $request->title,
-            'completed' => false,
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+    ]);
+
+    \App\Models\Task::create([
+        'user_id' => auth()->id(),
+        'title' => $request->title,
+    ]);
 
         return redirect()->route('tasks.index')->with('success', 'Task added successfully!');
     }
