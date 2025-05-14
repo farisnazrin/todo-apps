@@ -11,7 +11,10 @@ class TaskController extends Controller
     // Show tasks
     public function index()
     {
-        $tasks = \App\Models\Task::where('user_id', auth()->id())->get();
+        $tasks = Task::where('user_id', auth()->id())
+            ->orderBy('completed') // false (0) first, true (1) later
+            ->orderBy('due_date')  // optional: sort by due date within each section
+            ->get();
     
         return view('tasks.index', compact('tasks'));
     }
@@ -25,17 +28,19 @@ class TaskController extends Controller
 public function store(Request $request)
 {
     $request->validate([
-        'title' => 'required|string|max:255',
+        'title' => 'required',
+        'due_date' => 'nullable|date',
     ]);
 
-    \App\Models\Task::create([
+    Task::create([
         'user_id' => auth()->id(),
         'title' => $request->title,
+        'due_date' => $request->due_date,
+        'completed' => false,
     ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Task added successfully!');
-    }
-
+    return redirect()->route('tasks.index');
+}
     // Toggle task completion
     public function toggle(Task $task)
     {
