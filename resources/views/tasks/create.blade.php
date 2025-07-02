@@ -39,7 +39,25 @@
                             <input type="datetime-local" name="due_date" class="form-control rounded-3 shadow-sm">
                             <div class="form-text">Optional — set a deadline if needed</div>
                         </div>
-
+                        <!-- Priority -->
+                        <div class="mb-4">
+                            <label for="priority" class="form-label fw-semibold">Priority <span class="text-danger">*</span></label>
+                            <select name="priority" id="priority" class="form-select form-select-lg rounded-3 shadow-sm" required>
+                                <option value="non-urgent" selected>Non-Urgent</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <!-- Color Picker -->
+                        <div class="mb-4">
+                            <label for="color" class="form-label fw-semibold">Task Color</label>
+                            <input type="color" name="color" class="form-control form-control-color" value="#ffffff" title="Choose your color">
+                        </div>
+                        <!-- Place -->
+                        <div class="mb-4">
+                            <label for="place" class="form-label fw-semibold">Task Location / Place</label>
+                            <input type="text" name="place" class="form-control rounded-3 shadow-sm" placeholder="E.g., Library, Home, Office">
+                            <div class="form-text">Optional — describe where the task will happen</div>
+                        </div>
                         <!-- Buttons -->
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary px-4 py-2 rounded-3">

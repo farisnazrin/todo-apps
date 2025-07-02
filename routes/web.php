@@ -48,6 +48,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
         Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
+        Route::post('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
+        Route::get('/archived', [TaskController::class, 'archived'])->name('tasks.archived');
+        Route::post('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
+
+
     });
 
     // Logout route (POST request)
@@ -56,7 +61,6 @@ Route::middleware(['auth'])->group(function () {
         return redirect('/')->with('status', 'Logged out!');
     })->name('logout');
 
-  
-
+    Route::post('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
 
 });

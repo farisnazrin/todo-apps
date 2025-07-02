@@ -12,10 +12,11 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::where('user_id', auth()->id())
+            ->where('archived', false)
             ->orderBy('completed') // false (0) first, true (1) later
             ->orderBy('due_date')  // optional: sort by due date within each section
             ->get();
-    
+        
         return view('tasks.index', compact('tasks'));
     }
 
@@ -27,19 +28,26 @@ class TaskController extends Controller
 
 public function store(Request $request)
 {
+    
     $request->validate([
         'title' => 'required',
+        'priority' => 'required|in:urgent,non-urgent',
         'due_date' => 'nullable|date',
+        'place' => 'nullable|string|max:255',
     ]);
 
     Task::create([
         'user_id' => auth()->id(),
-        'title' => $request->title,
-        'due_date' => $request->due_date,
+        'title' => $request->input('title'),
+        'priority' => $request->input('priority'), // ✅ this line matters
+        'color'=> $request->input('color'),
+        'place'=> $request->input('place'),
+        'due_date' => $request->input('due_date'),
         'completed' => false,
+        'archived' => false,
     ]);
 
-    return redirect()->route('tasks.index');
+    return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
 }
     // Toggle task completion
     public function toggle(Task $task)
@@ -72,4 +80,40 @@ public function store(Request $request)
         $task->delete();
         return redirect()->route('tasks.index');
     }
+
+    public function archive(Task $task)
+{
+    if ($task->user_id === auth()->id()) {
+        $task->archived = true;
+        $task->save();
+    }
+
+    return redirect()->route('tasks.index')->with('success', 'Task archived.');
+}
+
+
+    public function archived()
+    {
+        $tasks = Task::where('user_id', auth()->id())
+            ->where('archived', true)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+    
+        return view('tasks.archived', compact('tasks'));
+    }
+    
+    public function restore(Task $task)
+{
+    // Instead of authorize, do a manual check
+    if ($task->user_id !== auth()->id()) {
+        abort(403, 'Unauthorized');
+    }
+
+    $task->archived = false;
+    $task->save();
+
+    return redirect()->route('tasks.archived')->with('success', 'Task restored successfully.');
+}
+
+
 }
