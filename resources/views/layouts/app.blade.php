@@ -10,6 +10,9 @@
     <nav class="navbar navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="{{ route('tasks.index') }}">To-Do List</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('tasks.archived') }}">📦 Archived</a>
+            </li>            
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-danger">Logout</button>
