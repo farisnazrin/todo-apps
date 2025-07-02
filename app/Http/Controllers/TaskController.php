@@ -115,5 +115,40 @@ public function store(Request $request)
     return redirect()->route('tasks.archived')->with('success', 'Task restored successfully.');
 }
 
+public function edit(Task $task)
+{
+    if ($task->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    return view('tasks.edit', compact('task'));
+}
+
+public function update(Request $request, Task $task)
+{
+    if ($task->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    $request->validate([
+        'title' => 'required',
+        'priority' => 'required|in:urgent,non-urgent',
+        'color' => 'required|string',
+        'due_date' => 'nullable|date',
+        'place' => 'nullable|string|max:255',
+    ]);
+
+    $task->update([
+        'title' => $request->title,
+        'priority' => $request->priority,
+        'color' => $request->color,
+        'due_date' => $request->due_date,
+        'place' => $request->place,
+    ]);
+
+    return redirect()->route('tasks.index')->with('success', 'Task updated!');
+}
+
+
 
 }

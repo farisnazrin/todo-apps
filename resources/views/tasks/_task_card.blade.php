@@ -38,6 +38,7 @@
         </div>
         <!-- Button group container -->
         <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-outline-primary">✏️</a>
             @if($task->completed && !$task->archived)
                 <form method="POST" action="{{ route('tasks.archive', $task) }}">
                     @csrf
@@ -48,7 +49,7 @@
             <form method="POST" action="{{ route('tasks.destroy', $task) }}">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+                <button type="submit" class="btn btn-sm btn-outline-danger">🗑 </button>
             </form>
         </div>
     </div>

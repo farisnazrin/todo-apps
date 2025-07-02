@@ -52,6 +52,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/archived', [TaskController::class, 'archived'])->name('tasks.archived');
         Route::post('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
 
+        // Edit and update task
+        Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+        Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+
 
     });
 
